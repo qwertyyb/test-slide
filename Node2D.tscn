@@ -1,0 +1,60 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://GroundBody.gd" type="Script" id=1]
+[ext_resource path="res://icon.png" type="Texture" id=2]
+[ext_resource path="res://Player.gd" type="Script" id=3]
+
+[sub_resource type="PhysicsMaterial" id=5]
+friction = 0.0
+
+[sub_resource type="Curve2D" id=8]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, -560, 24, -341.391, -240.332, 341.391, 240.332, 136, 280, -322.193, -51.3803, 322.193, 51.3803, 728, 856, -564.26, -180.354, 564.26, 180.354, 1616, 992, -293.04, -115.052, 293.04, 115.052, 3392, 2336, -199.576, 27.4585, 199.576, -27.4585, 3928, 2400, 0, 0, 0, 0, 4312, 2184, 0, 0, 0, 0, 4312, 3024, 0, 0, 0, 0, 4496, 3032, 0, 0, 0, 0, 4496, 2192, -216.228, 94.4068, 216.228, -94.4068, 4952, 2176, 0, 0, 0, 0, 5352, 1056, 0, 0, 0, 0, 5344, 3176, 0, 0, 0, 0, 1544, 3184, 0, 0, 0, 0, 456, 2032, 0, 0, 0, 0, -320, 936, 0, 0, 0, 0, -560, 464, 0, 0, 0, 0, -560, 24 )
+}
+
+[sub_resource type="PhysicsMaterial" id=10]
+friction = 0.0
+
+[sub_resource type="CircleShape2D" id=9]
+radius = 32.0
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Ground" type="StaticBody2D" parent="."]
+position = Vector2( 232, -56 )
+physics_material_override = SubResource( 5 )
+
+[node name="GroundBody" type="CollisionPolygon2D" parent="Ground"]
+script = ExtResource( 1 )
+
+[node name="GroundPath" type="Path2D" parent="Ground/GroundBody"]
+curve = SubResource( 8 )
+
+[node name="Player" type="RigidBody2D" parent="."]
+mass = 100.0
+physics_material_override = SubResource( 10 )
+linear_damp = 0.0
+angular_damp = 0.0
+script = ExtResource( 3 )
+
+[node name="Sprite" type="Sprite" parent="Player"]
+texture = ExtResource( 2 )
+
+[node name="PlayerBody" type="CollisionShape2D" parent="Player"]
+position = Vector2( 0, -1 )
+shape = SubResource( 9 )
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+offset = Vector2( 200, 50 )
+current = true
+
+[node name="InfoLayer" type="CanvasLayer" parent="."]
+
+[node name="PointsLabel" type="Label" parent="InfoLayer"]
+margin_left = 952.0
+margin_right = 992.0
+margin_bottom = 14.0
+rect_scale = Vector2( 1.74518, 1.74518 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+text = "200m"
+align = 2
