@@ -1,6 +1,4 @@
-extends RigidBody2D
-
-onready var PointsLabel = get_node("../InfoLayer/PointsLabel")
+extends Sprite
 
 
 # Declare member variables here. Examples:
@@ -14,8 +12,6 @@ func _ready():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
-
-func _physics_process(delta):
-	PointsLabel.text = "%sm" % ceil(position.x / 100)
+func _process(delta):
+	print(delta)
+	get_parent().unit_offset = get_parent().unit_offset + 0.01 * delta
