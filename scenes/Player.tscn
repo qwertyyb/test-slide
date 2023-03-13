@@ -23,12 +23,8 @@ orbit_velocity_random = 0.0
 scale = 3.0
 scale_random = 0.4
 
-[node name="Player" type="RigidBody2D"]
+[node name="Player" type="KinematicBody2D"]
 position = Vector2( -9, -61 )
-continuous_cd = 1
-contacts_reported = 2
-contact_monitor = true
-can_sleep = false
 script = ExtResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="."]
@@ -58,6 +54,3 @@ position = Vector2( -15, 10 )
 rotation = 0.425777
 amount = 40
 process_material = SubResource( 13 )
-
-[connection signal="body_entered" from="." to="." method="_on_Player_body_entered"]
-[connection signal="body_exited" from="." to="." method="_on_Player_body_exited"]
