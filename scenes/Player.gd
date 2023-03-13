@@ -24,6 +24,10 @@ var velocity = Vector2(0, 10)		# 初始速度
 
 var _last_collision_body = null
 
+var timer = null
+
+var emitExitedBodyNum = 0
+
 func _physics_process(delta):
 	if sleeping:
 		return
@@ -37,12 +41,17 @@ func _physics_process(delta):
 		velocity = newVelocity
 		rotation = PI / 2 + collision.normal.angle()
 		_last_collision_body = collision.collider
+		emitExitedBodyNum = rand_range(1, 10)
 		_on_Player_body_entered(_last_collision_body)
 	else:
 		velocity += g * delta
 		if _last_collision_body:
-			_on_Player_body_exited(_last_collision_body)
-			_last_collision_body = null
+			var curNum = emitExitedBodyNum
+			timer = get_tree().create_timer(0.2, false)
+			yield(timer, "timeout")
+			if curNum == emitExitedBodyNum:
+				_on_Player_body_exited(_last_collision_body)
+				_last_collision_body = null
 		
 		
 func _unhandled_key_input(event):
@@ -58,6 +67,8 @@ func playerDiedHandler():
 	
 func reborn():
 	position = Vector2.ZERO
+	velocity = Vector2(0, 10)
+	_last_collision_body = null
 	sleeping = false
 	rotation = 0
 	$SnowTail.visible = false
