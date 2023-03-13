@@ -27,6 +27,7 @@ var _last_collision_body = null
 var timer = null
 
 var emitExitedBodyNum = 0
+var _rotation_tween
 
 func _physics_process(delta):
 	if sleeping:
@@ -35,19 +36,32 @@ func _physics_process(delta):
 	
 	var collision = move_and_collide(velocity)
 	if collision:
+		# 处理速度
 		var newVelocity = velocity - velocity.project(-collision.normal)
 		var a = g.project(newVelocity.normalized())
 		newVelocity = newVelocity + a * delta
 		velocity = newVelocity
-		rotation = PI / 2 + collision.normal.angle()
+		
+		# 处理旋转
+		var target_rotation = PI / 2 + collision.normal.angle()
+		if _rotation_tween:
+			_rotation_tween.kill()
+		_rotation_tween = create_tween()
+		_rotation_tween.tween_property(self, "rotation", target_rotation, 0.17)
+		_rotation_tween.play()
+		
+		# 处理碰撞
 		_last_collision_body = collision.collider
 		emitExitedBodyNum = rand_range(1, 10)
 		_on_Player_body_entered(_last_collision_body)
 	else:
+		# 没有碰撞，计算仅重力作用下的新的速度
 		velocity += g * delta
+
 		if _last_collision_body:
+			# 如果0.17s(10帧)内没有发生新的碰撞，则认为碰撞已结束
 			var curNum = emitExitedBodyNum
-			timer = get_tree().create_timer(0.2, false)
+			timer = get_tree().create_timer(0.17, false)
 			yield(timer, "timeout")
 			if curNum == emitExitedBodyNum:
 				_on_Player_body_exited(_last_collision_body)
@@ -63,6 +77,9 @@ func playerDiedHandler():
 	sleeping = true
 	$SlideSnowAudio.playing = false
 	$SnowTail.visible = false
+	if _rotation_tween:
+		_rotation_tween.kill()
+		_rotation_tween = null
 	emit_signal("died")
 	
 func reborn():
