@@ -33,8 +33,6 @@ func _physics_process(delta):
 	if sleeping:
 		return
 	emit_signal("position_changed", position)
-	print(get_node("Camera2D").get_camera_screen_center())
-	print(get_canvas_transform())
 	
 	var collision = move_and_collide(velocity)
 	if collision:

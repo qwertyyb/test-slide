@@ -46,3 +46,5 @@ script = ExtResource( 4 )
 [node name="GroundPath" type="Path2D" parent="Ground/GroundBody"]
 visible = false
 curve = SubResource( 8 )
+
+[connection signal="points_changed" from="Ground/GroundBody/PathTest" to="Ground/GroundBody" method="_on_PathTest_points_changed"]

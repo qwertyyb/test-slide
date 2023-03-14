@@ -119,3 +119,6 @@ texture_normal = ExtResource( 5 )
 [connection signal="position_changed" from="Player" to="InfoLayer/PointsLabel" method="_on_Player_position_changed"]
 [connection signal="pressed" from="StartLayer/StartButton" to="." method="_on_StartButton_pressed"]
 [connection signal="pressed" from="EndedLayer/RestartButton" to="." method="_on_RestartButton_pressed"]
+
+[editable path="Map"]
+[editable path="Player"]

@@ -1,7 +1,6 @@
-tool
 extends CollisionPolygon2D
 
-onready var GroundPath = get_node("./PathTest")
+onready var GroundPath = get_node("./GroundPath")
 
 # Declare member variables here. Examples:
 # var a = 2
@@ -9,8 +8,8 @@ onready var GroundPath = get_node("./PathTest")
 
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
-	polygon = GroundPath.getPoints()
+#func _ready():
+#	pass
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -19,3 +18,7 @@ func _ready():
 
 func _draw():
 	draw_polygon(polygon, [Color(1, 1, 1)])
+
+
+func _on_PathTest_points_changed(points):
+	polygon = points
