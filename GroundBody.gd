@@ -1,7 +1,7 @@
 tool
 extends CollisionPolygon2D
 
-onready var GroundPath = get_node("./GroundPath")
+onready var GroundPath = get_node("./PathTest")
 
 # Declare member variables here. Examples:
 # var a = 2
@@ -10,7 +10,7 @@ onready var GroundPath = get_node("./GroundPath")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	polygon = GroundPath.curve.tessellate()
+	polygon = GroundPath.getPoints()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

@@ -33,6 +33,8 @@ func _physics_process(delta):
 	if sleeping:
 		return
 	emit_signal("position_changed", position)
+	print(get_node("Camera2D").get_camera_screen_center())
+	print(get_canvas_transform())
 	
 	var collision = move_and_collide(velocity)
 	if collision:
@@ -66,7 +68,8 @@ func _physics_process(delta):
 			if curNum == emitExitedBodyNum:
 				_on_Player_body_exited(_last_collision_body)
 				_last_collision_body = null
-		
+				
+	velocity.x = min(10, velocity.x)
 		
 func _unhandled_key_input(event):
 	if event.is_action("ui_accept"):
