@@ -42,11 +42,32 @@ func addPoints():
 		curve.add_point(pPoint, cPoint - pPoint)
 	emitEvent()
 
+var _default_config_points = []
+func setDefault():
+	for i in range(curve.get_point_count()):
+		var point = curve.get_point_position(i)
+		var inPosition = curve.get_point_in(i)
+		var outPosition = curve.get_point_out(i)
+		_default_config_points.push_back({
+			"position": point,
+			"inPosition": inPosition,
+			"outPosition": outPosition,
+		})
+	leftTopPoint = curve.get_point_position(0)
+	rightBottomPoint = curve.get_point_position(curve.get_point_count() - 1)
+
+func resetDefault():
+	curve.clear_points()
+	for pos in _default_config_points:
+		print(pos)
+		curve.add_point(pos.position, pos.inPosition, pos.outPosition)
+	leftTopPoint = curve.get_point_position(0)
+	rightBottomPoint = curve.get_point_position(curve.get_point_count() - 1)
+	
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	randomize()
-	leftTopPoint = curve.get_point_position(0)
-	rightBottomPoint = curve.get_point_position(curve.get_point_count() - 1)
+	setDefault()
 	addPoints()
 
 var _lastClearX = 0
@@ -58,7 +79,8 @@ func _process(delta):
 		_lastClearX = viewportOrigin.x
 
 func reset():
-	pass
+	resetDefault()
+	addPoints()
 
 func emitEvent():
 	var points = curve.tessellate()
