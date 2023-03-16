@@ -63,7 +63,7 @@ func _physics_process(delta):
 			rotation -= 0.1
 			velocity += g * delta * 0.5
 		else:
-			velocity += g * delta * 2
+			velocity += g * delta
 
 		if _last_collision_body:
 			# 如果0.17s(10帧)内没有发生新的碰撞，则认为碰撞已结束

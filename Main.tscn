@@ -16,10 +16,12 @@ script/source = "extends Node2D
 
 func start():
 	$EndedLayer.visible = false
-	$Player.reborn()
-	$Map.reset()
 	$StartLayer.visible = false
 	$InfoLayer.visible = true
+	$Player.reborn()
+#	等待camera挪过来
+	yield(get_tree().create_timer(0.1), \"timeout\")
+	$Map.reset()
 
 func _on_StartButton_pressed():
 	start()
@@ -28,7 +30,7 @@ func _on_Player_died():
 	$InfoLayer.visible = false
 	$EndedLayer/PointsLabel.text = $InfoLayer/PointsLabel.text
 	$EndedLayer.visible = true
-
+	$Map.stop()
 
 func _on_RestartButton_pressed():
 	start()
@@ -152,6 +154,3 @@ texture_normal = ExtResource( 5 )
 [connection signal="position_changed" from="Player" to="InfoLayer/PointsLabel" method="_on_Player_position_changed"]
 [connection signal="pressed" from="StartLayer/StartButton" to="." method="_on_StartButton_pressed"]
 [connection signal="pressed" from="EndedLayer/RestartButton" to="." method="_on_RestartButton_pressed"]
-
-[editable path="Map"]
-[editable path="Player"]

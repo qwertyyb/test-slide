@@ -2,6 +2,8 @@ extends Path2D
 
 signal points_changed(points)
 
+var running = false
+
 var leftTopPoint = Vector2.ZERO
 var rightBottomPoint = Vector2.ZERO
 
@@ -59,7 +61,6 @@ func setDefault():
 func resetDefault():
 	curve.clear_points()
 	for pos in _default_config_points:
-		print(pos)
 		curve.add_point(pos.position, pos.inPosition, pos.outPosition)
 	leftTopPoint = curve.get_point_position(0)
 	rightBottomPoint = curve.get_point_position(curve.get_point_count() - 1)
@@ -68,10 +69,12 @@ func resetDefault():
 func _ready():
 	randomize()
 	setDefault()
-	addPoints()
+	reset()
 
 var _lastClearX = 0
 func _process(delta):
+	if not running:
+		return
 	var viewportOrigin = transform.origin - get_viewport_transform().origin
 	if viewportOrigin.x - _lastClearX > abs(get_viewport_rect().size.x):
 		clearOutdatePoints()
@@ -81,6 +84,11 @@ func _process(delta):
 func reset():
 	resetDefault()
 	addPoints()
+	_lastClearX = 0
+	running = true
+
+func stop():
+	running = false
 
 func emitEvent():
 	var points = curve.tessellate()
