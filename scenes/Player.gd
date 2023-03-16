@@ -34,6 +34,8 @@ func _physics_process(delta):
 		return
 	emit_signal("position_changed", position)
 	
+	var oldPos = position
+	
 	var collision = move_and_collide(velocity)
 	if collision:
 		# 处理速度
@@ -56,7 +58,12 @@ func _physics_process(delta):
 		_on_Player_body_entered(_last_collision_body)
 	else:
 		# 没有碰撞，计算仅重力作用下的新的速度
-		velocity += g * delta
+		
+		if Input.is_action_pressed("ui_accept"):
+			rotation -= 0.1
+			velocity += g * delta * 0.5
+		else:
+			velocity += g * delta * 2
 
 		if _last_collision_body:
 			# 如果0.17s(10帧)内没有发生新的碰撞，则认为碰撞已结束
@@ -67,7 +74,7 @@ func _physics_process(delta):
 				_on_Player_body_exited(_last_collision_body)
 				_last_collision_body = null
 				
-	velocity.x = min(10, velocity.x)
+	velocity.x = min(15, velocity.x)
 		
 func _unhandled_key_input(event):
 	if event.is_action("ui_accept"):

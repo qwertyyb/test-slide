@@ -6,8 +6,8 @@ var leftTopPoint = Vector2.ZERO
 var rightBottomPoint = Vector2.ZERO
 
 func addPoints():
-	var angleEdge = { "min": 100, "max": 200 }
-	var line = { "min": 300, "max": 300 }
+	var angleEdge = { "min": 200, "max": 300 }
+	var line = { "min": 400, "max": 500 }
 	var width = abs(get_viewport_rect().size.x)
 	var viewportOrigin = transform.origin - get_viewport_transform().origin
 	while(rightBottomPoint.x < viewportOrigin.x + 3 * width):
@@ -32,7 +32,7 @@ func addPoints():
 			pPoint = cPoint + lastDirection.rotated(finalAngle) * rand_range(angleEdge.min, angleEdge.max)
 		else:
 			pMinAngle = -lastDirection.angle()
-			pMaxAngle = -PI / 6
+			pMaxAngle = -PI / 12
 			var finalAngle = rand_range(pMinAngle, pMaxAngle)
 			pPoint = cPoint + lastDirection.rotated(finalAngle) * rand_range(angleEdge.min, angleEdge.max)
 	
