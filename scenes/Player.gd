@@ -64,6 +64,7 @@ func _physics_process(delta):
 			velocity += g * delta * 0.5
 		else:
 			velocity += g * delta
+			rotation += 0.004
 
 		if _last_collision_body:
 			# 如果0.17s(10帧)内没有发生新的碰撞，则认为碰撞已结束
@@ -111,8 +112,6 @@ func _on_Player_body_entered(body):
 			var r = (round(rotation_degrees) as int) % 360
 			if r > 90 || r < -90:
 				playerDiedHandler()
-		elif body.get_meta("bodyType") == "Hole":
-			playerDiedHandler()
 
 
 func _on_Player_body_exited(body):

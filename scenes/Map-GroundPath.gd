@@ -2,8 +2,6 @@ extends Path2D
 
 signal points_changed(points)
 
-var running = false
-
 var leftTopPoint = Vector2.ZERO
 var rightBottomPoint = Vector2.ZERO
 
@@ -11,7 +9,7 @@ func addPoints():
 	var angleEdge = { "min": 200, "max": 300 }
 	var line = { "min": 400, "max": 500 }
 	var width = abs(get_viewport_rect().size.x)
-	var viewportOrigin = transform.origin - get_viewport_transform().origin
+	var viewportOrigin = transform.origin - get_viewport().canvas_transform.origin
 	while(rightBottomPoint.x < viewportOrigin.x + 3 * width):
 		var length = curve.get_baked_points().size()
 		var lastPoint = curve.get_baked_points()[length - 1]
@@ -73,9 +71,7 @@ func _ready():
 
 var _lastClearX = 0
 func _process(delta):
-	if not running:
-		return
-	var viewportOrigin = transform.origin - get_viewport_transform().origin
+	var viewportOrigin = transform.origin - get_viewport().canvas_transform.origin
 	if viewportOrigin.x - _lastClearX > abs(get_viewport_rect().size.x):
 		clearOutdatePoints()
 		addPoints()
@@ -85,10 +81,10 @@ func reset():
 	resetDefault()
 	addPoints()
 	_lastClearX = 0
-	running = true
+	set_process(true)
 
 func stop():
-	running = false
+	set_process(false)
 
 func emitEvent():
 	var points = curve.tessellate()
@@ -102,7 +98,7 @@ func emitEvent():
 	emit_signal("points_changed", points)
 
 func clearOutdatePoints():
-	var viewportOrigin = transform.origin - get_viewport_transform().origin
+	var viewportOrigin = transform.origin - get_viewport().canvas_transform.origin
 	var safeWidth = abs(get_viewport_rect().size.x)
 	var minX = viewportOrigin.x - safeWidth
 	var i = 0
