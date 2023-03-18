@@ -3,24 +3,9 @@ extends KinematicBody2D
 signal position_changed(position)
 signal died
 
-var sleeping = true
-
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
-
-
-# Called when the node enters the scene tree for the first time.
-#func _ready():
-#	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
-
 const g = Vector2(0, 9.8)		# 重力加速度
 var velocity = Vector2(0, 10)		# 初始速度
+var _default_position = Vector2.ZERO
 
 var _last_collision_body = null
 
@@ -29,12 +14,12 @@ var timer = null
 var emitExitedBodyNum = 0
 var _rotation_tween
 
+func _ready():
+	_default_position = position
+	set_physics_process(false)
+
 func _physics_process(delta):
-	if sleeping:
-		return
 	emit_signal("position_changed", position)
-	
-	var oldPos = position
 	
 	var collision = move_and_collide(velocity)
 	if collision:
@@ -62,8 +47,8 @@ func _physics_process(delta):
 			rotation -= 0.1
 			velocity += g * delta * 0.5
 		else:
-			velocity += g * delta
-			rotation += 0.004
+			velocity += g * delta * 4
+			rotation += 0.008
 
 		if _last_collision_body:
 			# 如果0.17s(10帧)内没有发生新的碰撞，则认为碰撞已结束
@@ -74,10 +59,16 @@ func _physics_process(delta):
 				_on_Player_body_exited(_last_collision_body)
 				_last_collision_body = null
 				
-	velocity.x = min(15, velocity.x)
+	velocity = velocity.normalized() * min(10, velocity.length())
+
+func _unhandled_input(event):
+	var isJumpUpAction = _last_collision_body and event.is_action_pressed("ui_up") or event is InputEventMouseButton and event.button_index == BUTTON_LEFT
+	if isJumpUpAction:
+		velocity += velocity.normalized().rotated(-PI/2) * 4
+		
 		
 func playerDiedHandler():
-	sleeping = true
+	set_physics_process(false)
 	$SlideSnowAudio.playing = false
 	$SnowTail.visible = false
 	if _rotation_tween:
@@ -86,12 +77,13 @@ func playerDiedHandler():
 	emit_signal("died")
 	
 func reborn():
-	position = Vector2.ZERO
+	position = _default_position
 	velocity = Vector2(0, 10)
 	_last_collision_body = null
-	sleeping = false
+	set_physics_process(false)
 	rotation = 0
 	$SnowTail.visible = false
+	set_physics_process(true)
 
 func _on_Player_body_entered(body):
 	# 播放音频
@@ -102,10 +94,13 @@ func _on_Player_body_entered(body):
 
 	# 碰撞时检测角度，如果是背部发生碰撞，则玩家死亡
 	if body.has_meta("bodyType"):
-		if body.get_meta("bodyType") == "Ground":
+		var bodyType = body.get_meta("bodyType")
+		if bodyType == "Ground":
 			var r = (round(rotation_degrees) as int) % 360
 			if r > 90 || r < -90:
 				playerDiedHandler()
+		elif bodyType == "rock":
+			playerDiedHandler()
 
 
 func _on_Player_body_exited(body):

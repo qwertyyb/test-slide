@@ -108,9 +108,10 @@ stream = ExtResource( 12 )
 volume_db = -8.0
 
 [node name="Map" parent="." instance=ExtResource( 1 )]
+position = Vector2( 0, 146 )
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
-position = Vector2( 0, 0 )
+position = Vector2( 162, 151 )
 
 [node name="InfoLayer" type="CanvasLayer" parent="."]
 pause_mode = 2

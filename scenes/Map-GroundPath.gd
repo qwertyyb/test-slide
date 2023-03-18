@@ -1,6 +1,7 @@
 extends Path2D
 
 signal points_changed(points)
+signal rock_position_created(position, rotation)
 
 var leftTopPoint = Vector2.ZERO
 var rightBottomPoint = Vector2.ZERO
@@ -16,30 +17,39 @@ func addPoints():
 		var lastSecPoint = curve.get_baked_points()[length - 2]
 		var lastDirection = (lastPoint - lastSecPoint).normalized()
 		
-		if rand_range(0, 1) < 0.4:
-			curve.add_point(lastPoint + lastDirection * rand_range(line.min, line.max))
-			continue
-		
-		var cPoint = lastPoint + lastDirection * rand_range(angleEdge.min, angleEdge.max)
-		var pMinAngle = 0
-		var pMaxAngle = 0
 		var pPoint = Vector2.ZERO
 		
-		if lastDirection.angle() < PI / 6:
-			pMinAngle = PI / 6 - lastDirection.angle()
-			pMaxAngle = PI / 2 - lastDirection.angle()  - PI / 6
-			var finalAngle = rand_range(pMinAngle, pMaxAngle)
-			pPoint = cPoint + lastDirection.rotated(finalAngle) * rand_range(angleEdge.min, angleEdge.max)
-		else:
-			pMinAngle = -lastDirection.angle()
-			pMaxAngle = -PI / 12
-			var finalAngle = rand_range(pMinAngle, pMaxAngle)
-			pPoint = cPoint + lastDirection.rotated(finalAngle) * rand_range(angleEdge.min, angleEdge.max)
-	
-		rightBottomPoint.x = max(rightBottomPoint.x, pPoint.x)
-		rightBottomPoint.y = max(rightBottomPoint.y, pPoint.y)
+		if rand_range(0, 1) < 0.5:
+			# 添加直线
+			var lineLength = rand_range(line.min, line.max)
+			pPoint = lastPoint + lastDirection * lineLength
+			curve.add_point(pPoint)
+			
+			# 横向时，在直线2/3到尾部随机添加石头
+			if lastDirection.angle() < PI / 5 and rand_range(0, 1) < 0.4:
+				# 生成石头的位置
+				var rockPosition = lastPoint + lastDirection * rand_range(lineLength * 2 / 3, lineLength - 20)
+				emit_signal("rock_position_created", rockPosition, lastDirection.angle())
+		else: 
+			var cPoint = lastPoint + lastDirection * rand_range(angleEdge.min, angleEdge.max)
+			var pMinAngle = 0
+			var pMaxAngle = 0
+			
+			if lastDirection.angle() < PI / 6:
+				pMinAngle = PI / 6 - lastDirection.angle()
+				pMaxAngle = PI / 2 - lastDirection.angle()  - PI / 6
+				var finalAngle = rand_range(pMinAngle, pMaxAngle)
+				pPoint = cPoint + lastDirection.rotated(finalAngle) * rand_range(angleEdge.min, angleEdge.max)
+			else:
+				pMinAngle = -lastDirection.angle()
+				pMaxAngle = -PI / 12
+				var finalAngle = rand_range(pMinAngle, pMaxAngle)
+				pPoint = cPoint + lastDirection.rotated(finalAngle) * rand_range(angleEdge.min, angleEdge.max)
 		
-		curve.add_point(pPoint, cPoint - pPoint)
+			rightBottomPoint.x = max(rightBottomPoint.x, pPoint.x)
+			rightBottomPoint.y = max(rightBottomPoint.y, pPoint.y)
+			
+			curve.add_point(pPoint, cPoint - pPoint)
 	emitEvent()
 
 var _default_config_points = []
@@ -67,7 +77,7 @@ func resetDefault():
 func _ready():
 	randomize()
 	setDefault()
-	reset()
+	emitEvent()
 
 var _lastClearX = 0
 func _process(delta):

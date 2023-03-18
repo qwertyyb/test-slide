@@ -41,8 +41,10 @@ position = Vector2( 0, -0.625 )
 shape = SubResource( 12 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
-offset = Vector2( 200, 50 )
+offset = Vector2( 350, 150 )
 current = true
+drag_margin_h_enabled = true
+drag_margin_v_enabled = true
 
 [node name="SlideSnowAudio" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 3 )
