@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://scenes/Map.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://assets/back 3.png" type="Texture" id=9]
 [ext_resource path="res://assets/back 1.png" type="Texture" id=10]
 [ext_resource path="res://assets/back 2.png" type="Texture" id=11]
+[ext_resource path="res://assets/background.mp3" type="AudioStream" id=12]
 
 [sub_resource type="GDScript" id=9]
 script/source = "extends Node2D
@@ -22,6 +23,7 @@ func start():
 	$EndedLayer.visible = false
 	$StartLayer.visible = false
 	$InfoLayer.visible = true
+	$BackgroundAudioPlayer.play()
 	$Player.reborn()
 #	等待camera挪过来
 	yield(get_tree().create_timer(0.1), \"timeout\")
@@ -35,6 +37,7 @@ func _on_Player_died():
 	$EndedLayer/PointsLabel.text = $InfoLayer/PointsLabel.text
 	$EndedLayer.visible = true
 	$Map.stop()
+	$BackgroundAudioPlayer.stop()
 
 func _on_RestartButton_pressed():
 	start()
@@ -98,6 +101,10 @@ motion_mirroring = Vector2( 1024, 0 )
 [node name="Back1" type="Sprite" parent="ParallaxBackground/ParallaxLayer"]
 position = Vector2( 0, -107 )
 texture = ExtResource( 10 )
+
+[node name="BackgroundAudioPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 12 )
+volume_db = -8.0
 
 [node name="Map" parent="." instance=ExtResource( 1 )]
 

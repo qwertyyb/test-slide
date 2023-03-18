@@ -10,7 +10,7 @@ friction = 0.0
 
 [sub_resource type="Curve2D" id=11]
 _data = {
-"points": PoolVector2Array( 0, 0, 0, 0, -562, 25, -78.1104, -34.7554, 78.1104, 34.7554, 14, 161, 0, 0, 0, 0, 190, 297 )
+"points": PoolVector2Array( 0, 0, 0, 0, -562, 25, -167.082, -62.3404, 167.082, 62.3404, -76, 139, 0, 0, 0, 0, 190, 297 )
 }
 
 [node name="Map" type="Node2D"]

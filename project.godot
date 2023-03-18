@@ -22,10 +22,6 @@ window/dpi/allow_hidpi=true
 window/stretch/mode="2d"
 window/stretch/aspect="keep"
 
-[global]
-
-font=true
-
 [gui]
 
 common/drop_mouse_on_gui_input_disabled=true
