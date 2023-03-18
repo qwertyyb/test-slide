@@ -58,8 +58,7 @@ func _physics_process(delta):
 		_on_Player_body_entered(_last_collision_body)
 	else:
 		# 没有碰撞，计算仅重力作用下的新的速度
-		
-		if Input.is_action_pressed("ui_accept"):
+		if Input.is_action_pressed("ui_up") or Input.is_mouse_button_pressed(BUTTON_LEFT):
 			rotation -= 0.1
 			velocity += g * delta * 0.5
 		else:
@@ -76,11 +75,6 @@ func _physics_process(delta):
 				_last_collision_body = null
 				
 	velocity.x = min(15, velocity.x)
-		
-func _unhandled_key_input(event):
-	if event.is_action("ui_accept"):
-		pass
-#		angular_velocity = -6
 		
 func playerDiedHandler():
 	sleeping = true
