@@ -28,6 +28,7 @@ func start():
 #	等待camera挪过来
 	yield(get_tree().create_timer(0.1), \"timeout\")
 	$Map.reset()
+	$InfoLayer/TogglePauseButton.grab_focus()
 
 func _on_StartButton_pressed():
 	start()
