@@ -3,7 +3,7 @@
 [ext_resource path="res://assets/rock.png" type="Texture" id=1]
 [ext_resource path="res://scenes/Rock.gd" type="Script" id=2]
 
-[node name="Rock" type="StaticBody2D"]
+[node name="Rock" type="StaticBody2D" groups=["rocks"]]
 pause_mode = 2
 script = ExtResource( 2 )
 

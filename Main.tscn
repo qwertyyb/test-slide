@@ -64,43 +64,41 @@ __meta__ = {
 }
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
-offset = Vector2( 512, 0 )
-transform = Transform2D( 1, 0, 0, 1, 512, 0 )
 
 [node name="ParallaxLayer4" type="ParallaxLayer" parent="ParallaxBackground"]
 motion_scale = Vector2( 0.001, 0 )
-motion_offset = Vector2( -399.8, -39.96 )
+motion_offset = Vector2( -511.488, -300 )
 motion_mirroring = Vector2( 1024, 0 )
 
 [node name="Back4" type="Sprite" parent="ParallaxBackground/ParallaxLayer4"]
-position = Vector2( 0, -11 )
+position = Vector2( 512, 300 )
 texture = ExtResource( 7 )
 
 [node name="ParallaxLayer3" type="ParallaxLayer" parent="ParallaxBackground"]
-motion_scale = Vector2( 0.03, 0 )
-motion_offset = Vector2( -188, -47 )
+motion_scale = Vector2( 0.01, 0 )
+motion_offset = Vector2( -506.88, -300 )
 motion_mirroring = Vector2( 1024, 0 )
 
 [node name="Back3" type="Sprite" parent="ParallaxBackground/ParallaxLayer3"]
-position = Vector2( 0, 5 )
+position = Vector2( 512, 314 )
 texture = ExtResource( 9 )
 
 [node name="ParallaxLayer2" type="ParallaxLayer" parent="ParallaxBackground"]
 motion_scale = Vector2( 0.05, 0 )
-motion_offset = Vector2( -186, -46.5 )
+motion_offset = Vector2( -486.4, -300 )
 motion_mirroring = Vector2( 1024, 0 )
 
 [node name="Back2" type="Sprite" parent="ParallaxBackground/ParallaxLayer2"]
-position = Vector2( 0, -95 )
+position = Vector2( 512, 266 )
 texture = ExtResource( 11 )
 
 [node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
 motion_scale = Vector2( 0.09, 0 )
-motion_offset = Vector2( -182, -45.5 )
+motion_offset = Vector2( -465.92, -300 )
 motion_mirroring = Vector2( 1024, 0 )
 
 [node name="Back1" type="Sprite" parent="ParallaxBackground/ParallaxLayer"]
-position = Vector2( 0, -107 )
+position = Vector2( 512, 247 )
 texture = ExtResource( 10 )
 
 [node name="BackgroundAudioPlayer" type="AudioStreamPlayer" parent="."]
@@ -108,10 +106,10 @@ stream = ExtResource( 12 )
 volume_db = -8.0
 
 [node name="Map" parent="." instance=ExtResource( 1 )]
-position = Vector2( 0, 146 )
+position = Vector2( 0, 252 )
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
-position = Vector2( 162, 151 )
+position = Vector2( 162, 300 )
 
 [node name="InfoLayer" type="CanvasLayer" parent="."]
 pause_mode = 2
@@ -178,6 +176,8 @@ margin_top = 40.0
 margin_right = 134.0
 margin_bottom = 138.0
 texture_normal = ExtResource( 5 )
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
 
 [connection signal="died" from="Player" to="." method="_on_Player_died"]
 [connection signal="position_changed" from="Player" to="InfoLayer/PointsLabel" method="_on_Player_position_changed"]

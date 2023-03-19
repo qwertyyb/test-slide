@@ -2,7 +2,13 @@ extends Node2D
 
 var RockScene = preload("res://scenes/Rock.tscn")
 
+func _removeAllRocks():
+	for node in get_tree().get_nodes_in_group("rocks"):
+		node.get_parent().remove_child(node)
+		node.queue_free()
+
 func reset():
+	_removeAllRocks()
 	$Ground/GroundBody/GroundPath.reset()
 	
 func stop():
